@@ -22,11 +22,15 @@ export const SolanaWalletProvider = ({
   children: React.ReactNode;
 }) => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
-  const network = WalletAdapterNetwork.Devnet;
-
   // You can also provide a custom RPC endpoint.
   // Targeting Helius Bounty: Use Helius RPC here when ready
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const network = WalletAdapterNetwork.Devnet;
+
+  // Utilize the Helius RPC URL from environment variables if available
+  const endpoint = useMemo(() => 
+    process.env.NEXT_PUBLIC_HELIUS_RPC_URL || clusterApiUrl(network), 
+    [network]
+  );
 
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],

@@ -3,23 +3,83 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/status-Hackathon_MVP-orange.svg)
 ![Network](https://img.shields.io/badge/network-Solana_Devnet-green.svg)
-![Privacy](https://img.shields.io/badge/privacy-Token--2022-purple.svg)
+![Track](https://img.shields.io/badge/track-Private_Payments-purple.svg)
 
 **The first compliance-aware privacy layer for real-time payroll on Solana.**
 
-JetrPay allows businesses to stream salaries and make batched payments confidentially using **Token-2022**, while maintaining regulatory compliance through **Range Protocol** risk scoring and View Key auditing.
+> "Pay employees anonymously - companies send salaries without knowing who received what, employees receive without revealing identity."
 
-> **🏆 Built for the Solana Privacy Hackathon 2026**
-> *   **Track**: Private Payments
-> *   **Integrations**: Range Protocol, Helius, Token-2022, Radr Labs (ShadowWire)
-
-![JetrPay Banner](https://placehold.co/1200x400/000000/FFF?text=JetrPay+Privacy+Layer)
+## 📊 Track & Prize Target
+*   **Primary Track**: Private Payments ($15,000)
+*   **Bounties**: 
+    *   **Range Protocol** (Compliance & Risk Scoring)
+    *   **Helius** (Enterprise RPC & Indexing)
+    *   **Token-2022** (Confidential Transfers)
 
 ---
 
-## 🏗️ Technical Architecture
+## 💡 The Privacy Crisis in Payroll
 
-JetrPay bridges the gap between **on-chain privacy** and **real-world compliance**. We utilize a "Gatekeeper" architecture where funds can only enter the hidden state (Confidential Token) after passing a Risk Score check.
+### Problem 1: Employer Surveillance
+In traditional and crypto payroll, employers know everything.
+*   Exactly what each employee earns.
+*   Side income from other sources (wallet tracking).
+*   Spending habits (DeFi yield farming, NFT purchases).
+*   *Real impact*: Only finding out your employee has a side hustle affects raise negotiations ("She doesn't need more money").
+
+### Problem 2: Employee Privacy Leaks
+When companies pay salaries on-chain via standard SPL transfers:
+*   **The Glass House**: All employees can see each other's wallets via the transaction graph.
+*   **Competitive Intelligence**: Competitors can map your entire org chart and salary structure.
+*   **Targeting**: Criminals target high-earning employee wallets.
+*   **Discrimination**: Salary transparency reveals pay gaps publicly before HR can address them.
+
+### Problem 3: Cross-Border Surveillance
+Remote workers (e.g., in Nigeria/Brazil working for US DAOs) face:
+*   Banks flagging crypto conversions.
+*   Family pressure when income is visible on-chain.
+*   Tax authorities tracking every micro-transaction.
+
+### Problem 4: Financial Censorship
+Controversial industries (Adult content, journalism, crypto-native) often face bank freezes or payment processor bans based purely on "who is paying you."
+
+---
+
+## ❌ Current Solutions Are Broken
+
+| Solution | Why it fails for Payroll |
+| :--- | :--- |
+| **Mixers (Tornado Cash)** | Sanctioned, high risk of criminal association, complex UX. |
+| **Multiple Wallets** | Gas inefficient, still linkable via timing analytics, management nightmare. |
+| **Privacy Coins (Monero)** | Not on Solana, low liquidity, difficult off-ramps. |
+| **Traditional Banks** | Slow (3-5 days), expensive ($45 SWIFT fees), high surveillance. |
+
+---
+
+## ✅ The JetrPay Solution
+
+We leverage **Solana's Token-2022 Confidential Transfers** to solve this *natively*.
+
+### Core Innovation: Compliance-Aware Confidentiality
+
+1.  **Shielded Corporate Vault**:
+    The company deposits payroll funds (USDC) into a **Confidential Token Account** (Token-2022).
+    *   *Result*: The company's treasury balance is encrypted on-chain.
+
+2.  **Confidential Streaming**:
+    Salaries are sent using `TransferConfidential` instructions.
+    *   *Result*: The **Amount** is encrypted using Twisted ElGamal. The public ledger sees a transaction happened, but not only the Sender and Receiver know the value.
+
+3.  **Compliance Gate (Range Protocol)**:
+    Before any wallet can interact with the privacy pool (Shield/Unshield), it is screened.
+    *   *Result*: Illicit actors (sanctioned wallets) are rejected at the gate, keeping the anonymity set clean.
+
+4.  **Ghost Mode UI**:
+    A client-side privacy layer that blurs sensitive data in the browser to prevent "shoulder surfing" in co-working spaces.
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 graph TD
@@ -39,110 +99,77 @@ graph TD
     end
 
     subgraph "Solana Network (Token-2022)"
-        Program[SPL Token-2022]:::private
-        PublicMint[Public USDC Mint]:::public
-        PrivateMint[Confidential Wrapped Mint]:::private
-        Vault[Company Private Vault]:::private
-        EmpWallet[Employee Wallet]:::private
+        PublicUSDC[Public USDC]:::public
+        ConfidentialMint[Confidential Wrapped Mint]:::private
+        
+        CompanyVault[Company Vault (Encrypted)]:::private
+        EmpWallet[Employee Wallet (Encrypted)]:::private
     end
 
     %% Flow
     User((Employer)) -->|1. Connect| Wallet
-    Wallet -->|2. Request Shield| UI
-    UI -->|3. Verify AML/KYC| API
-    API --> RiskEngine
+    Wallet -->|2. Shield Request| UI
+    UI -->|3. Verify AML| API
     
-    RiskEngine --"High Risk (Block)"--> UI
-    RiskEngine --"Low Risk (Allow)"--> Wallet
+    RiskEngine --"Block"--> UI
+    RiskEngine --"Allow"--> Wallet
     
-    Wallet -->|4. Deposit Public USDC| Program
-    Program --"Lock"--> PublicMint
-    Program --"Mint 1:1"--> PrivateMint
+    Wallet -->|4. Deposit| ConfidentialMint
+    ConfidentialMint -->|5. Mint Encrypted| CompanyVault
     
-    PrivateMint -->|5. Encrypted Balance| Vault
-    Vault -->|6. Confidential Transfer| EmpWallet
+    CompanyVault -->|6. Confidential Transfer| EmpWallet
     
     subgraph "Auditing"
-        Auditor((IRS/Auditor)) -.->|View Key| Vault
+        Auditor((IRS/Auditor)) -.->|View Key| CompanyVault
     end
 ```
 
 ---
 
-## ⚡ Key Features
+## 💰 Market Opportunity
 
-### 1. 👁️ Ghost Mode
-A one-click privacy toggle in the UI (Global Header). When active, it:
-*   Blurs all balance amounts.
-*   Switches the dashboard to a "Stealth" color palette.
-*   Prevents shoulder-surfing in public workspaces (co-working, cafes).
-
-### 2. 🛡️ Compliance-First Shielding
-We solve the "Tornado Cash" problem. JetrPay is **not** a mixer for illicit funds.
-*   **Range Protocol Integration**: Before any wallet can mint the private token, its history is screened against AML/Sanctions lists.
-*   **Gatekeeper Logic**: High-risk scores trigger a UI block, preventing the transaction from being constructed.
-
-### 3. 🔒 Token-2022 Confidential Transfers
-We leverage the native Solana standard, not a custom quirky smart contract.
-*   **Encryption**: Uses ElGamal encryption for balances.
-*   **Performance**: Indexed via **Helius RPC** for low latency.
-*   **Future Proof**: Standard SPL tokens mean wallet compatibility.
+*   **TAM**: $600B Global Payroll Market.
+*   **Crypto-Native Workforce**: 5M+ people.
+*   **The Opportunity**: ~$300B/year in crypto payroll.
+*   **Demand**: 73% of employees would take a 5% pay cut for financial privacy.
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-*   Node.js 18+
-*   pnpm
-*   Solana CLI (optional)
+### 1. Installation
+```bash
+git clone git@github.com:Ayomisco/jetrpay-solana.git
+cd jetrpay-solana/frontend
+npm install
+```
 
-### Installation
+### 2. Configuration
+Copy `.env.example` to `.env.local` and add your keys (Helius, Range).
 
-1.  **Clone & Install**
-    ```bash
-    git clone git@github.com:Ayomisco/jetrpay-solana.git
-    cd jetrpay-solana
-    
-    # Install Frontend
-    cd frontend
-    pnpm install
-    ```
+### 3. Run
+```bash
+npm run dev
+```
 
-2.  **Environment Setup**
-    Create `.env.local` in `frontend/`:
-    ```env
-    NEXT_PUBLIC_SOLANA_NETWORK=devnet
-    NEXT_PUBLIC_HELIUS_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_KEY
-    NEXT_PUBLIC_RANGE_API_KEY=YOUR_RANGE_KEY
-    ```
-
-3.  **Run Development Server**
-    ```bash
-    pnpm dev
-    ```
+### 4. Smart Contract Scripts
+Manage the privacy lifecycle from the CLI:
+```bash
+cd ../contracts
+npm run mint      # Create Confidential Mint
+npm run shield    # Deposit Funds
+npm run transfer  # Send Private Payment
+```
 
 ---
 
-## 📂 Repository Structure
-
-| Path | Description |
-| :--- | :--- |
-| `frontend/` | Next.js 14 App Router application. |
-| `frontend/lib/solana/` | Core logic for Token-2022 interactions. |
-| `frontend/components/privacy/` | Ghost Mode UI components. |
-| `contracts/` | Anchor workspace for custom logic (if needed). |
-| `contracts/scripts/` | TypeScript scripts to setup Mints and test transfers. |
-
 ## 🛠️ Technology Stack
 
-*   **Frontend**: Next.js 14, Tailwind CSS, Shadcn/UI
 *   **Blockchain**: Solana (Devnet)
-*   **Token Standard**: SPL Token-2022 (Extensions: ConfidentialTransfer)
-*   **RPC Provider**: **Helius** (Required for indexing confidential transfers)
-*   **Compliance**: **Range Protocol** (Wallet Risk Screening)
-*   **Wallet**: Solana Wallet Adapter (Phantom, Solflare)
+*   **Privacy Standard**: SPL Token-2022 (ConfidentialTransfer Extension)
+*   **Compliance**: Range Protocol (Risk Scoring)
+*   **Infrastructure**: Helius (RPC & Indexing)
+*   **Frontend**: Next.js 14, Tailwind, Shadcn/UI
 
 ## 📄 License
-
-Distributed under the MIT License.
+MIT | Built for Solana Privacy Hackathon 2026

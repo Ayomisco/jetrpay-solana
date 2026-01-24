@@ -1,32 +1,36 @@
-# JetrPay Frontend (Solana)
+# JetrPay Frontend (Solana Privacy)
 
-The user interface for JetrPay, built with Next.js 14 and configured for the Solana Privacy Hackathon.
+The user interface for JetrPay, built with Next.js 14 and configured for the **Solana Privacy Hackathon 2026**.
 
-## 🌟 Features Implemented
+## 🌟 Privacy Features
+*   **Ghost Mode**: Global CSS filter that blurs sensitive financial data (`.privacy-sensitive`) to prevent shoulder surfing.
+*   **Compliance Gate**: Integration with **Range Protocol** (`lib/solana/compliance.ts`) to screen wallets before allowing deposits.
+*   **Confidentiality**: UI flows for "Shielding" (Public -> Private) and "Unshielding" (Private -> Public) using Token-2022.
 
-*   **Ghost Mode**: A global privacy context that blurs sensitive numbers (`globals.css` utility).
-*   **Solana Provider**: Wrapped in `layout.tsx` using Helius RPC recommendation.
-*   **Compliance Mock**: `lib/solana/compliance.ts` simulates Range Protocol checks.
-*   **Wallet Overview**: `wallet-overview.tsx` handles the "Shield/Unshield" workflow.
+## 🛠️ Setup & Run
 
-## 🛠️ Commands
+1.  **Install Dependencies**
+    ```bash
+    npm install
+    # Note: We use legacy-peer-deps due to some wallet-adapter conflicts
+    npm install --legacy-peer-deps
+    ```
 
-*   `pnpm dev`: Start dev server.
-*   `pnpm build`: Build for production (Vercel).
-*   `pnpm lint`: Check code quality.
+2.  **Environment Configuration**
+    Copy `.env.example` to `.env.local` and populate:
+    ```env
+    NEXT_PUBLIC_HELIUS_RPC_URL=... # Required for Token-2022 Indexing
+    NEXT_PUBLIC_RANGE_API_KEY=...  # Required for Risk Scoring
+    NEXT_PUBLIC_CONFIDENTIAL_MINT=... # address from 'npm run mint'
+    ```
 
-## 🔑 Environment Variables
-
-Required in `.env.local`:
-
-```
-NEXT_PUBLIC_HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=...
-NEXT_PUBLIC_RANGE_API_KEY=...
-NEXT_PUBLIC_SOLANA_NETWORK=devnet
-```
+3.  **Start Development Server**
+    ```bash
+    npm run dev
+    ```
 
 ## 🧩 Key Components
 
-*   `components/privacy/PrivacyToggle.tsx`: The "Eye" icon logic.
-*   `components/dashboard/wallet-overview.tsx`: The main interacting point for shielding.
-*   `lib/app-context.tsx`: Manages global state (user role, balances).
+*   `components/privacy/PrivacyToggle.tsx`: The "Eye" icon logic controlling the global blur state.
+*   `components/wallet/SolanaWalletProvider.tsx`: Configured with Helius RPC support.
+*   `app/(landing)/`: Marketing pages (Landing, Roadmap, Pricing) re-branded for the hackathon.
