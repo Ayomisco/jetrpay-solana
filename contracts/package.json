@@ -1,0 +1,21 @@
+{
+  "name": "jetrpay-contracts",
+  "version": "1.0.0",
+  "description": "Scripts for managing Token-2022 Confidential Transfers",
+  "dependencies": {
+    "@solana/spl-token": "^0.3.9",
+    "@solana/web3.js": "^1.87.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "mint": "ts-node scripts/setup-mint.ts",
+    "create-account": "ts-node scripts/create-account.ts",
+    "shield": "ts-node scripts/shield.ts",
+    "transfer": "ts-node scripts/transfer.ts",
+    "unshield": "ts-node scripts/unshield.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10"
+  }
+}

@@ -6,9 +6,9 @@ import { Check } from "lucide-react"
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white selection:bg-orange-500 selection:text-black">
       {/* Header */}
-      <div className="border-b border-neutral-900 py-12">
+      <div className="border-b border-white/5 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -17,7 +17,7 @@ export default function PricingPage() {
             ← Back to Home
           </Link>
           <h1 className="text-5xl sm:text-6xl font-black italic tracking-tighter">Pricing</h1>
-          <p className="text-neutral-400 mt-4 max-w-2xl">Transparent, scalable pricing for every business size.</p>
+          <p className="text-neutral-400 mt-4 max-w-2xl">Compliance-aware privacy doesn't have to be expensive.</p>
         </div>
       </div>
 
@@ -26,42 +26,41 @@ export default function PricingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              name: "Starter",
-              desc: "For small teams & freelancers",
+              name: "Public",
+              desc: "Standard SPL Transfers",
               price: "Free",
               period: "Forever",
-              features: ["Up to 5 employees", "EWA access", "Basic analytics", "Email support"],
-              cta: "Get Started",
+              features: ["Public Ledger Payments", "Unlimited Transactions", "Basic Dashboard", "Community Support"],
+              cta: "Start Public",
               highlight: false,
             },
             {
-              name: "Professional",
-              desc: "For growing companies",
-              price: "$99",
+              name: "Ghost",
+              desc: "Token-2022 Confidentiality",
+              price: "$49",
               period: "/month",
               features: [
-                "Up to 100 employees",
-                "All Starter features",
-                "Bill pay automation",
-                "Savings goals",
-                "Advanced analytics",
-                "Priority support",
+                "Encrypted Balances",
+                "Confidential Transfers (Zero-Knowledge)",
+                "Ghost Mode UI Access",
+                "Range Protocol Screening (Basic)",
+                "Priority Support",
               ],
-              cta: "Start Free Trial",
+              cta: "Go Private",
               highlight: true,
             },
             {
               name: "Enterprise",
-              desc: "For large organizations",
+              desc: "Regulatory Compliance",
               price: "Custom",
               period: "pricing",
               features: [
-                "Unlimited employees",
-                "All Professional features",
-                "Custom integrations",
-                "Dedicated account manager",
-                "Custom branding",
-                "SLA guarantee",
+                "Auditor View Keys",
+                "Custom Compliance Gates",
+                "Multi-Sig Vault (Squads)",
+                "Dedicated Account Manager",
+                "SLA Guarantee",
+                "Fiat On-Ramp Integration",
               ],
               cta: "Contact Sales",
               highlight: false,
@@ -77,7 +76,7 @@ export default function PricingPage() {
             >
               {plan.highlight && (
                 <div className="absolute top-0 right-0 bg-orange-500 text-black px-4 py-1 text-[9px] font-black uppercase tracking-widest">
-                  Popular
+                  Hackathon Finalist
                 </div>
               )}
               <div>
@@ -116,10 +115,10 @@ export default function PricingPage() {
           <h2 className="text-3xl font-black italic tracking-tighter text-center">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
-              { q: "Can I change plans later?", a: "Yes, upgrade or downgrade anytime with no penalty." },
-              { q: "Is there a setup fee?", a: "No setup fees. Start streaming payroll immediately." },
-              { q: "Do you offer discounts for annual payments?", a: "Yes, annual plans include 20% discount." },
-              { q: "What if I exceed my employee limit?", a: "We'll notify you, and you can upgrade instantly." },
+              { q: "Is the Confidential Transfer really private?", a: "Yes. It uses ElGamal encryption and Zero-Knowledge proofs standard in Token-2022." },
+              { q: "What is Range Protocol screening?", a: "We check all outgoing/incoming wallets against AML lists to ensure you don't interact with illicit actors." },
+              { q: "Can I upgrade from Public to Ghost?", a: "Instantly. Just shield your assets to switch modes." },
+              { q: "Do auditors have access?", a: "Only if you grant them a specific View Key. You retain full control." },
             ].map((faq, i) => (
               <div key={i} className="p-4 bg-[#0f0f0f] border border-neutral-800 rounded-none space-y-2">
                 <p className="font-black uppercase tracking-tight">{faq.q}</p>
