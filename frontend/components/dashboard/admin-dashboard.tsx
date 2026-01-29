@@ -12,6 +12,7 @@ import {
   Power,
   PowerOff,
   DollarSign,
+  Shield,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -30,7 +31,7 @@ import {
 import { cn } from "@/lib/utils"
 
 export default function AdminDashboard() {
-  const { employees, companyStats, updateEmployeeStatus, addEmployee, removeEmployee, addNotification } = useApp()
+  const { employees, companyStats, updateEmployeeStatus, addEmployee, removeEmployee, addNotification, assessRisk } = useApp()
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddingEmployee, setIsAddingEmployee] = useState(false)
 
@@ -337,6 +338,12 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </td>
+                    <td className="px-6 py-4">
+                       <div className="flex items-center gap-2"> 
+                         <div className={cn("w-2 h-2 rounded-full", assessRisk(emp.walletAddress).level === "Low" ? "bg-green-500" : "bg-red-500")} />
+                         <span className="text-[9px] font-black uppercase text-neutral-400">SCORE: {assessRisk(emp.walletAddress).score}</span>
+                       </div>
+                    </td>
                     <td className="px-6 py-4 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -362,6 +369,19 @@ export default function AdminDashboard() {
                                 <Power className="w-4 h-4 mr-3" /> Resume Stream
                               </>
                             )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                             className="text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-purple-500/10 focus:bg-purple-500/10 focus:text-purple-400 p-3"
+                             onClick={() => {
+                               const risk = assessRisk(emp.walletAddress)
+                               addNotification({
+                                 title: "Compliance Check Complete", 
+                                 message: `Range Protocol: Risk Level ${risk.level} (Score: ${risk.score}). Wallet Authorized.`, 
+                                 type: risk.level === "Low" ? "success" : "warning"
+                               })
+                             }}
+                          >
+                            <Shield className="w-4 h-4 mr-3" /> Risk Assessment
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-cyan-500/10 focus:bg-cyan-500/10 focus:text-cyan-400 p-3"

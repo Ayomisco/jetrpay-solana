@@ -8,34 +8,48 @@ import {
   Transaction,
 } from "@solana/web3.js";
 import {
-  TOKEN_2022_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
-  getAssociatedTokenAddressSync,
+  getAssociatedTokenAddress,
   createInitializeAccountInstruction,
   ExtensionType,
 } from "@solana/spl-token";
+
+import { loadOrGenerateKeypair } from "./utils";
+
+// Hardcode Token-2022 ID
+const TOKEN_2022_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
 
 // Config - To be loaded from env or shared config in real app
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 // Helper: In production, use your actual wallet
-const getPayer = () => Keypair.generate(); 
+const getPayer = () => loadOrGenerateKeypair("payer"); 
 
 export const createConfidentialAccount = async (
   mintAddress: string,
   owner?: Keypair // Optional: Defaults to a new keypair if not provided
 ) => {
   const payer = getPayer();
-  const mint = new PublicKey(mintAddress);
+  const cleanMintAddress = mintAddress.trim();
+  console.log("Using Mint Address:", `"${cleanMintAddress}"`);
+  
+  const mint = new PublicKey(cleanMintAddress);
   const user = owner || Keypair.generate();
 
   console.log("Creating Account for:", user.publicKey.toBase58());
 
-  // 1. Fund Payer
-  console.log("Requesting Airdrop...");
-  await connection.requestAirdrop(payer.publicKey, 1e9).then(sig => 
-    connection.confirmTransaction(sig, "confirmed")
-  );
+  // 1. Check Balance & Fund Payer (Avoid spamming faucet)
+  const balance = await connection.getBalance(payer.publicKey);
+  console.log("Current Balance:", balance / 1e9, "SOL");
+  
+  if (balance < 1 * 1e9) {
+      console.log("Requesting Airdrop...");
+      await connection.requestAirdrop(payer.publicKey, 1e9).then(sig => 
+        connection.confirmTransaction(sig, "confirmed")
+      );
+  } else {
+      console.log("✅ Balance sufficient, skipping airdrop.");
+  }
 
   // 2. Get ATA Address
   // Note: For Token-2022 Confidential Transfers, we typically use the standard ATA
@@ -46,7 +60,10 @@ export const createConfidentialAccount = async (
   // Actually, for ConfidentialTransfer, the *Account* also needs initialization for the encryption keys.
   // This usually happens *after* creation via `createConfigureAccountInstruction` 
   
-  const ata = getAssociatedTokenAddressSync(
+  /* 
+     Using async getAssociatedTokenAddress to avoid version issues
+  */
+  const ata = await getAssociatedTokenAddress(
     mint,
     user.publicKey,
     false,

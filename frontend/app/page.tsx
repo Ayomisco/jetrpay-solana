@@ -79,7 +79,7 @@ export default function LandingPage() {
               onClick={() => router.push("/onboarding")}
               className="bg-white hover:bg-neutral-200 text-black font-black uppercase text-xs tracking-widest rounded-none h-14 px-8"
             >
-              Start Shieldimg <ArrowRight className="w-4 h-4 ml-2" />
+              Start Shielding <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
             <Button
               variant="outline"

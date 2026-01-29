@@ -8,7 +8,7 @@ import { useApp } from "@/lib/app-context"
 import { cn } from "@/lib/utils"
 
 export default function Onboarding() {
-  const { setIsLoggedIn, setUserRole, setUserName, setUserEmail, connectWallet } = useApp()
+  const { setIsLoggedIn, setUserRole, setUserName, setUserEmail, connectWallet, walletAddress } = useApp()
   const [step, setStep] = useState(1)
   const [role, setRole] = useState<"employee" | "admin" | null>(null)
   const [authMethod, setAuthMethod] = useState<"magic" | "web3" | null>(null)
@@ -21,16 +21,23 @@ export default function Onboarding() {
     setStep(2)
   }
 
+  // Effect to handle Wallet Connection success
+  useEffect(() => {
+    if (step === 2 && walletAddress) {
+       setUserName(`AGENT_${walletAddress.slice(0, 6)}`)
+       setStep(3)
+    }
+  }, [step, walletAddress, setUserName])
+
   const handleAuth = async (method: "magic" | "web3") => {
     setAuthMethod(method)
     if (method === "web3") {
-      const addr = await connectWallet()
-      setUserName(`AGENT_${addr.slice(0, 6)}`)
+      connectWallet() // Trigger modal, wait for useEffect to catch walletAddress change
     } else if (emailInput) {
       setUserEmail(emailInput)
       setUserName(emailInput.split("@")[0].toUpperCase())
+      setStep(3)
     }
-    setStep(3)
   }
 
   const startVerification = () => {
@@ -93,39 +100,61 @@ export default function Onboarding() {
           {step === 2 && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
               <div className="space-y-2">
-                <h2 className="text-3xl font-black italic tracking-tighter uppercase">ESTABLISH IDENTITY</h2>
+                <h2 className="text-3xl font-black italic tracking-tighter uppercase">
+                  {role === "admin" ? "ENTERPRISE ACCESS" : "AGENT IDENTITY"}
+                </h2>
                 <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">
-                  Connect via Web3Auth or link your enterprise identifier.
+                  {role === "admin" 
+                    ? "Verify corporate credentials to access payroll ledger."
+                    : "Connect via Web3Auth to establish stream receiver."}
                 </p>
               </div>
-              <div className="space-y-4">
-                <Button
-                  onClick={() => handleAuth("web3")}
-                  className="w-full h-16 bg-white text-black hover:bg-neutral-200 font-black uppercase text-xs tracking-widest"
-                >
-                  <Wallet className="w-4 h-4 mr-2" /> CONNECT SECURE WALLET
-                </Button>
-                <div className="flex items-center gap-4 py-2">
-                  <div className="h-px bg-white/10 flex-1" />
-                  <span className="text-[9px] text-neutral-600 font-black">OR ENTERPRISE LINK</span>
-                  <div className="h-px bg-white/10 flex-1" />
-                </div>
-                <div className="space-y-3">
-                  <Input
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="E-MAIL IDENTIFIER"
-                    className="h-14 bg-black border-white/10 text-white font-bold tracking-widest uppercase focus:border-orange-500/50"
-                  />
+
+              {role === "admin" ? (
+                // Enterprise Flow
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black uppercase text-neutral-400">Business Tax ID / EIN</label>
+                    <Input
+                      value={emailInput}
+                      onChange={(e) => setEmailInput(e.target.value)}
+                      placeholder="XX-XXXXXXX"
+                      className="h-14 bg-black border-white/10 text-white font-bold tracking-widest uppercase focus:border-cyan-500/50"
+                    />
+                  </div>
                   <Button
-                    disabled={!emailInput}
-                    onClick={() => handleAuth("magic")}
-                    className="w-full h-14 border border-white/20 hover:bg-white/5 text-white font-black uppercase text-[10px] tracking-widest bg-transparent"
+                    disabled={!emailInput || emailInput.length < 5}
+                    onClick={() => handleAuth("web3")}
+                    className="w-full h-16 bg-white text-black hover:bg-neutral-200 font-black uppercase text-xs tracking-widest disabled:opacity-50"
                   >
-                    SEND MAGIC LINK
+                    <Building2 className="w-4 h-4 mr-2" /> VERIFY & CONNECT WALLET
+                  </Button>
+                  <p className="text-[8px] text-neutral-600 text-center uppercase">
+                    SECURED BY RANGE PROTOCOL
+                  </p>
+                </div>
+              ) : (
+                // Employee Flow
+                <div className="space-y-4">
+                  <Button
+                    onClick={() => handleAuth("web3")}
+                    className="w-full h-16 bg-orange-500 text-black hover:bg-orange-600 font-black uppercase text-xs tracking-widest"
+                  >
+                    <Wallet className="w-4 h-4 mr-2" /> CONNECT SECURE WALLET
+                  </Button>
+                  <div className="flex items-center gap-4 py-2 opacity-50">
+                    <div className="h-px bg-white/10 flex-1" />
+                    <span className="text-[9px] text-neutral-600 font-black">LEGACY METHODS</span>
+                    <div className="h-px bg-white/10 flex-1" />
+                  </div>
+                  <Button
+                    disabled
+                    className="w-full h-14 border border-white/10 text-neutral-500 font-black uppercase text-[10px] tracking-widest bg-transparent cursor-not-allowed"
+                  >
+                    EMAIL MAGIC LINK (DISABLED)
                   </Button>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
@@ -136,7 +165,7 @@ export default function Onboarding() {
                   {role === "admin" ? "KYB_VERIFY" : "KYC_VERIFY"}
                 </h2>
                 <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">
-                  Compliance protocols required for Arbitrum mainnet streaming.
+                  Compliance protocols required for Solana Devnet streaming.
                 </p>
               </div>
               <div className="bg-white/5 p-6 border border-white/10 space-y-6">
@@ -179,7 +208,7 @@ export default function Onboarding() {
               <div className="space-y-2">
                 <h3 className="text-xl font-black text-white uppercase italic">DEPLOYING AGENT</h3>
                 <p className="text-[9px] text-green-400 font-bold uppercase tracking-widest">
-                  IDENTITY_CONFIRMED: ARBITRUM_ONE
+                  IDENTITY_CONFIRMED: SOLANA_PRIVACY_PROTOCOL
                 </p>
               </div>
               <div className="w-full h-1 bg-white/5 overflow-hidden">
