@@ -229,7 +229,10 @@ export function AppProvider({ children }: AppShellProps) {
 
     const fetchBalances = async () => {
       try {
-        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+        const connection = new Connection(
+          process.env.NEXT_PUBLIC_HELIUS_RPC_URL || clusterApiUrl("devnet"), 
+          "confirmed"
+        );
         const pubKey = new PublicKey(walletAddress);
 
         // 1. SOL Balance
@@ -322,7 +325,10 @@ export function AppProvider({ children }: AppShellProps) {
     try {
       addNotification({ title: "Initializing Shield", message: "Preparing Token-2022 transaction...", type: "info" })
       
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+      const connection = new Connection(
+        process.env.NEXT_PUBLIC_HELIUS_RPC_URL || clusterApiUrl("devnet"), 
+        "confirmed"
+      )
       const MINT_ADDRESS = new PublicKey("5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3"); 
       const SHIELDED_WALLET = new PublicKey("5Kn6x3ie8rjNEhbUEtxj3aEu96oC13PojeDhyFBetSzV");
 

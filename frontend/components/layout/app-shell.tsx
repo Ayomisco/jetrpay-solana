@@ -88,7 +88,7 @@ export default function AppShell({ children }: AppShellProps) {
         <div className="p-8">
           <Link href="/dashboard" className="flex items-center gap-3 mb-16 group">
             <div className="w-10 h-10 flex items-center justify-center transition-transform group-hover:rotate-12 relative">
-              <Image src="/icon.svg" alt="JetrPay" width={40} height={40} className="object-contain" />
+              <Image src="/icon.png" alt="JetrPay" width={40} height={40} className="object-contain" />
             </div>
             <h1 className="text-xl font-black tracking-tighter italic text-white uppercase">JETRPAY</h1>
           </Link>

@@ -4,7 +4,8 @@ import {
   PublicKey, 
   SystemProgram, 
   Transaction, 
-  sendAndConfirmTransaction 
+  sendAndConfirmTransaction,
+  clusterApiUrl 
 } from "@solana/web3.js";
 import { 
   createInitializeMintInstruction, 
@@ -16,8 +17,11 @@ import {
   getOrCreateAssociatedTokenAccount
 } from "@solana/spl-token";
 
-// MOCK: In a real app, these are imported or passed in
-const connection = new Connection("https://api.devnet.solana.com", "confirmed");
+// Use Helius RPC from environment or fallback to default devnet
+const connection = new Connection(
+  process.env.NEXT_PUBLIC_HELIUS_RPC_URL || clusterApiUrl("devnet"),
+  "confirmed"
+);
 
 export const createConfidentialToken = async (payer: Keypair) => {
   // 1. Create Mint Keypair

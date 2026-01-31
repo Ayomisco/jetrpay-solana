@@ -10,7 +10,10 @@ const geistMono = GeistMono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "JetrPay | Private Real-Time Payroll",
   description: "Get paid by the second. Privacy-first payroll streaming infrastructure on Solana.",
-    generator: 'v0.app'
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 }
 
 export default function RootLayout({
