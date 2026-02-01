@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
 
 export function PrivacyToggle() {
   const [isGhostMode, setIsGhostMode] = useState(false);
@@ -23,8 +24,16 @@ export function PrivacyToggle() {
     
     if (newState) {
       document.documentElement.classList.add('ghost-mode');
+      toast({
+        title: "Ghost Mode Activated",
+        description: "All sensitive data is now hidden",
+      });
     } else {
       document.documentElement.classList.remove('ghost-mode');
+      toast({
+        title: "Ghost Mode Deactivated",
+        description: "Sensitive data is now visible",
+      });
     }
   };
 

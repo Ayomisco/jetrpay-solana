@@ -403,7 +403,9 @@ export function AppProvider({ children }: AppShellProps) {
     })
   }
 
+
   const addNotification = (notif: Omit<Notification, "id" | "timestamp" | "read">) => {
+    // Add to internal notifications state
     setNotifications((prev) => [
       {
         ...notif,
@@ -413,7 +415,18 @@ export function AppProvider({ children }: AppShellProps) {
       },
       ...prev,
     ])
+    
+    // Also trigger visual toast
+    if (typeof window !== 'undefined') {
+      const { toast } = require('@/hooks/use-toast')
+      toast({
+        title: notif.title,
+        description: notif.message,
+        variant: notif.type === "error" ? "destructive" : "default",
+      })
+    }
   }
+
 
   const markNotificationRead = (id: string) => {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))

@@ -4,6 +4,7 @@ import { Geist_Mono as GeistMono } from "next/font/google"
 import "./globals.css"
 import { AppProvider } from "@/lib/app-context"
 import { SolanaWalletProvider } from "@/components/wallet/SolanaWalletProvider"
+import { Toaster } from "@/components/ui/toaster"
 
 const geistMono = GeistMono({ subsets: ["latin"] })
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         <SolanaWalletProvider>
             <AppProvider>
             <LayoutWrapper>{children}</LayoutWrapper>
+            <Toaster />
             </AppProvider>
         </SolanaWalletProvider>
       </body>
