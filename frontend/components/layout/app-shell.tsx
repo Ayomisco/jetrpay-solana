@@ -42,8 +42,6 @@ export default function AppShell({ children }: AppShellProps) {
     { id: "payroll", icon: Zap, label: userRole === "admin" ? "PAYROLL" : "STREAMS", href: "/payroll" },
     { id: "wallet", icon: Wallet, label: "VAULT", href: "/wallet" },
     { id: "transactions", icon: History, label: "LEDGER", href: "/transactions" },
-    { id: "analytics", icon: TrendingUp, label: "INTELLIGENCE", href: "/analytics" },
-    { id: "settings", icon: Settings, label: "SYSTEMS", href: "/settings" },
   ]
 
   const handleSignOut = async () => {
@@ -139,8 +137,16 @@ export default function AppShell({ children }: AppShellProps) {
             ))}
           </nav>
         </div>
-        <div className="mt-auto p-8 border-t border-white/5">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="mt-auto p-8 border-t border-white/5 space-y-4">
+          <Link href="/pitch">
+            <Button 
+              variant="outline" 
+              className="w-full border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 font-black uppercase tracking-widest text-[10px] h-10"
+            >
+              🎬 PITCH DECK
+            </Button>
+          </Link>
+          <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white/5 border border-white/10 flex items-center justify-center font-black text-[10px]">
               A
             </div>
