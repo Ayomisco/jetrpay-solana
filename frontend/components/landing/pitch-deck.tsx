@@ -9,18 +9,21 @@ import Link from "next/link"
 const slides = [
   {
     id: "hook",
-    title: "THE PRIVACY CRISIS",
+    title: "THE HOOK",
     content: (
-      <div className="text-center max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
-          Payroll is <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Public</span>.
+      <div className="text-center max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight leading-tight">
+          Imagine you're an employee at a DAO getting paid in crypto.
         </h1>
-        <p className="text-xl md:text-3xl text-neutral-400 font-bold uppercase tracking-widest max-w-2xl mx-auto">
-          Every salary. Every bonus. Every side hustle. Visible to everyone.
-        </p>
-        <div className="pt-12">
-           <div className="inline-block border border-orange-500/30 bg-orange-500/10 px-6 py-2 rounded-full">
-              <span className="text-orange-500 font-mono font-bold tracking-widest uppercase text-sm">🛑 THE $300B PROBLEM</span>
+        <div className="space-y-6 text-xl md:text-2xl text-neutral-400 font-bold max-w-3xl mx-auto leading-relaxed">
+          <p>Every coworker can see <span className="text-orange-500">exactly what you make</span>.</p>
+          <p>Your boss can track <span className="text-red-500">your side hustles</span>.</p>
+          <p>Competitors can reconstruct your company's <span className="text-cyan-500">entire org chart</span>.</p>
+        </div>
+        <div className="pt-8 space-y-4">
+           <p className="text-2xl font-black text-white italic">This is the reality of payroll on public blockchains.</p>
+           <div className="inline-block border-2 border-orange-500 bg-orange-500/10 px-8 py-3 rounded-lg">
+              <span className="text-orange-500 font-mono font-black tracking-widest uppercase text-lg">JetrPay: First Compliance-Aware Privacy Layer</span>
            </div>
         </div>
       </div>
@@ -30,34 +33,61 @@ const slides = [
     id: "problem",
     title: "WHY IT MATTERS",
     content: (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-        <Card className="bg-black/50 border-white/10 p-8 flex flex-col items-center text-center space-y-6 hover:border-orange-500/50 transition-colors group backdrop-blur-sm">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-orange-500/10 transition-colors">
-                <Shield className="w-10 h-10 text-neutral-500 group-hover:text-orange-500 transition-colors" />
+      <div className="max-w-6xl mx-auto w-full space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl md:text-4xl font-black text-white">When companies pay salaries on-chain, three things happen:</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="bg-black/50 border-orange-500/50 p-8 flex flex-col space-y-6 hover:border-orange-500 transition-colors group backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <span className="text-5xl font-black text-orange-500">1</span>
+                <Shield className="w-12 h-12 text-orange-500" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase">Employers See ALL</h3>
+              <p className="text-neutral-400 font-mono text-sm leading-relaxed">
+                Your DeFi yields, NFT purchases, side income. All visible. Complete financial surveillance.
+              </p>
+          </Card>
+          <Card className="bg-black/50 border-red-500/50 p-8 flex flex-col space-y-6 hover:border-red-500 transition-colors group backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <span className="text-5xl font-black text-red-500">2</span>
+                <Lock className="w-12 h-12 text-red-500" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase">Employees Spy</h3>
+              <p className="text-neutral-400 font-mono text-sm leading-relaxed">
+                The entire salary structure is public before HR even knows. Coworkers compare paychecks.
+              </p>
+          </Card>
+          <Card className="bg-black/50 border-cyan-500/50 p-8 flex flex-col space-y-6 hover:border-cyan-500 transition-colors group backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <span className="text-5xl font-black text-cyan-500">3</span>
+                <Zap className="w-12 h-12 text-cyan-500" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase">Targets Painted</h3>
+              <p className="text-neutral-400 font-mono text-sm leading-relaxed">
+                High earners become targets for criminals, governments, and bad actors who can identify wealthy wallets.
+              </p>
+          </Card>
+        </div>
+        <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 p-8 rounded-xl text-center space-y-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-center">
+            <div>
+              <div className="text-5xl font-black text-orange-500">$300B</div>
+              <div className="text-sm text-neutral-400 uppercase tracking-widest">Market Per Year</div>
             </div>
-            <h3 className="text-2xl font-black text-white uppercase italic">Zero Privacy</h3>
-            <p className="text-neutral-500 font-mono text-sm leading-relaxed">
-                Employers track your DeFi activity. Coworkers see your raise before you do.
-            </p>
-        </Card>
-        <Card className="bg-black/50 border-white/10 p-8 flex flex-col items-center text-center space-y-6 hover:border-red-500/50 transition-colors group backdrop-blur-sm">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-red-500/10 transition-colors">
-                <Lock className="w-10 h-10 text-neutral-500 group-hover:text-red-500 transition-colors" />
+            <div className="hidden md:block w-px h-16 bg-white/20" />
+            <div>
+              <div className="text-5xl font-black text-cyan-500">5M</div>
+              <div className="text-sm text-neutral-400 uppercase tracking-widest">Crypto Workers</div>
             </div>
-            <h3 className="text-2xl font-black text-white uppercase italic">Targeted Attacks</h3>
-            <p className="text-neutral-500 font-mono text-sm leading-relaxed">
-                High-net-worth wallets distinctively marked for criminals and scammers.
-            </p>
-        </Card>
-        <Card className="bg-black/50 border-white/10 p-8 flex flex-col items-center text-center space-y-6 hover:border-cyan-500/50 transition-colors group backdrop-blur-sm">
-             <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors">
-                <Zap className="w-10 h-10 text-neutral-500 group-hover:text-cyan-500 transition-colors" />
+            <div className="hidden md:block w-px h-16 bg-white/20" />
+            <div>
+              <div className="text-5xl font-black text-red-500">73%</div>
+              <div className="text-sm text-neutral-400 uppercase tracking-widest">Want Privacy</div>
             </div>
-            <h3 className="text-2xl font-black text-white uppercase italic">73% Unhappy</h3>
-            <p className="text-neutral-500 font-mono text-sm leading-relaxed">
-                Of crypto workers would take a PAY CUT just to have financial privacy.
-            </p>
-        </Card>
+          </div>
+          <p className="text-neutral-300 italic text-lg">They'd take a pay cut for financial privacy.</p>
+        </div>
       </div>
     )
   },
@@ -65,35 +95,66 @@ const slides = [
     id: "solution",
     title: "THE SOLUTION",
     content: (
-      <div className="max-w-5xl mx-auto w-full space-y-12 animate-in fade-in zoom-in-95 duration-700">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative">
-              <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-orange-500/20 via-cyan-500/20 to-green-500/20 -z-10" />
+      <div className="max-w-6xl mx-auto w-full space-y-12 animate-in fade-in zoom-in-95 duration-700">
+          <h2 className="text-3xl font-black text-white text-center">JetrPay uses three cutting-edge technologies:</h2>
+          
+          <div className="space-y-6">
+              <Card className="bg-black/50 border-orange-500/50 p-8 hover:border-orange-500 transition-all">
+                  <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0">
+                          <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center">
+                              <span className="text-3xl font-black text-orange-500">1</span>
+                          </div>
+                      </div>
+                      <div className="space-y-3">
+                          <h3 className="text-2xl font-black text-orange-500 uppercase">Solana's Token-2022 Confidential Transfer Extension</h3>
+                          <p className="text-neutral-300 text-lg leading-relaxed">
+                              Encrypts salary amounts using <span className="text-orange-400 font-bold">ElGamal encryption</span> and <span className="text-orange-400 font-bold">Zero-Knowledge proofs</span>. 
+                              The blockchain sees a transaction happened, but <span className="italic">only the sender and receiver know the amount</span>.
+                          </p>
+                      </div>
+                  </div>
+              </Card>
 
-              <div className="bg-black border border-white/10 p-8 w-full md:w-1/3 text-center relative z-10 transition-all hover:scale-105 duration-300">
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-black font-black text-xs px-2 py-1 uppercase tracking-widest">Step 1</span>
-                  <h3 className="text-xl font-black text-white uppercase mb-2">Shield</h3>
-                  <p className="text-xs text-neutral-500 font-mono uppercase">Token-2022 Encryption</p>
-                  <p className="mt-4 text-xs text-neutral-400">Public USDC &rarr; Encrypted</p>
-              </div>
+              <Card className="bg-black/50 border-purple-500/50 p-8 hover:border-purple-500 transition-all">
+                  <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0">
+                          <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center">
+                              <span className="text-3xl font-black text-purple-500">2</span>
+                          </div>
+                      </div>
+                      <div className="space-y-3">
+                          <h3 className="text-2xl font-black text-purple-500 uppercase">Range Protocol for Compliance</h3>
+                          <p className="text-neutral-300 text-lg leading-relaxed">
+                              Before anyone can enter our privacy pool, their wallet gets <span className="text-purple-400 font-bold">screened</span>. 
+                              Sanctioned addresses? <span className="text-red-500 font-bold">Rejected</span>. High-risk wallets? <span className="text-red-500 font-bold">Blocked</span>. 
+                              <span className="block mt-2 text-purple-300 italic">This solves the Tornado Cash problem.</span>
+                          </p>
+                      </div>
+                  </div>
+              </Card>
 
-              <div className="bg-black border border-cyan-500/50 p-8 w-full md:w-1/3 text-center relative z-10 shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all hover:scale-110 duration-300">
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-cyan-500 text-black font-black text-xs px-2 py-1 uppercase tracking-widest">Core Engine</span>
-                  <h3 className="text-2xl font-black text-white uppercase mb-2 italic">Stream</h3>
-                  <p className="text-xs text-cyan-500 font-mono uppercase font-bold">Real-Time Pay</p>
-                   <p className="mt-4 text-xs text-neutral-400">Encrypted flow / sec</p>
-              </div>
-
-              <div className="bg-black border border-white/10 p-8 w-full md:w-1/3 text-center relative z-10 transition-all hover:scale-105 duration-300">
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-black font-black text-xs px-2 py-1 uppercase tracking-widest">Step 3</span>
-                  <h3 className="text-xl font-black text-white uppercase mb-2">Unshield</h3>
-                  <p className="text-xs text-neutral-500 font-mono uppercase">Range Compliance</p>
-                   <p className="mt-4 text-xs text-neutral-400">Encrypted &rarr; Private Cash Out</p>
-              </div>
+              <Card className="bg-black/50 border-cyan-500/50 p-8 hover:border-cyan-500 transition-all">
+                  <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0">
+                          <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                              <span className="text-3xl font-black text-cyan-500">3</span>
+                          </div>
+                      </div>
+                      <div className="space-y-3">
+                          <h3 className="text-2xl font-black text-cyan-500 uppercase">Real-Time Streaming on Solana</h3>
+                          <p className="text-neutral-300 text-lg leading-relaxed">
+                              Employees <span className="text-cyan-400 font-bold">earn per second</span>, withdraw <span className="text-cyan-400 font-bold">instantly</span>, 
+                              and the whole thing costs <span className="text-green-400 font-bold">pennies in fees</span>.
+                          </p>
+                      </div>
+                  </div>
+              </Card>
           </div>
 
-          <div className="text-center pt-8">
-              <h4 className="text-2xl font-bold text-white uppercase tracking-widest">
-                  Compliance + Privacy = <span className="text-cyan-400 italic">Practical</span>
+          <div className="bg-gradient-to-r from-cyan-500/10 to-orange-500/10 border-2 border-cyan-500/50 p-8 rounded-xl text-center">
+              <h4 className="text-3xl font-black text-white uppercase tracking-wide">
+                  The Result: <span className="text-cyan-400">Confidential</span> + <span className="text-purple-400">Compliant</span> = <span className="text-orange-400 italic">Winning</span>
               </h4>
           </div>
       </div>
