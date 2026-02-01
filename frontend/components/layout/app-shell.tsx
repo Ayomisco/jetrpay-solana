@@ -5,12 +5,14 @@ import { Wallet, Settings, Bell, Zap, LayoutDashboard, History, X, Menu, Trendin
 import { Button } from "@/components/ui/button"
 import { useApp } from "@/lib/app-context"
 import { PrivacyToggle } from "@/components/privacy/PrivacyToggle"
+import { WalletDropdown } from "@/components/wallet/WalletDropdown"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Link from "next/link"
 import Image from "next/image"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+
 
 interface AppShellProps {
   children: ReactNode
@@ -175,7 +177,8 @@ export default function AppShell({ children }: AppShellProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <WalletDropdown />
             <PrivacyToggle />
             <Popover>
               <PopoverTrigger asChild>
