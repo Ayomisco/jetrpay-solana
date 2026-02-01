@@ -22,8 +22,11 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="border-b border-white/5 sticky top-0 z-50 bg-black/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="font-black text-2xl italic tracking-tighter">
-            JetrPay<span className="text-orange-500">.</span>
+          <div className="flex items-center gap-3">
+            <Image src="/icon.png" alt="JetrPay" width={32} height={32} className="rounded" />
+            <div className="font-black text-2xl italic tracking-tighter">
+              JetrPay<span className="text-orange-500">.</span>
+            </div>
           </div>
           <div className="hidden md:flex gap-8 items-center text-[10px] font-bold uppercase tracking-widest">
             <a href="#features" className="text-neutral-400 hover:text-white transition">
