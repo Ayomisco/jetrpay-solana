@@ -1,11 +1,13 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Zap, Wallet, TrendingUp, Shield, Users, Globe } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useApp } from "@/lib/app-context"
 import { useEffect } from "react"
+
 
 export default function LandingPage() {
   const router = useRouter()
