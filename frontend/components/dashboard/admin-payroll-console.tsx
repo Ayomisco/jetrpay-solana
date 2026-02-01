@@ -30,6 +30,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 
 export default function AdminPayrollConsole() {
@@ -53,6 +60,8 @@ export default function AdminPayrollConsole() {
     role: "",
     salary: "",
     wallet: "",
+    paymentSchedule: "Monthly",
+    classification: "1099",
   })
 
   const handleAddEmployee = () => {
@@ -67,8 +76,10 @@ export default function AdminPayrollConsole() {
         accruedBalance: 0,
         walletAddress: newEmployee.wallet || "0x" + Math.random().toString(16).slice(2, 10),
         startDate: new Date().toISOString().split("T")[0],
+        paymentSchedule: newEmployee.paymentSchedule as "Daily" | "Weekly" | "Bi-Weekly" | "Monthly",
+        classification: newEmployee.classification as "1099" | "W-2",
       })
-      setNewEmployee({ name: "", role: "", salary: "", wallet: "" })
+      setNewEmployee({ name: "", role: "", salary: "", wallet: "", paymentSchedule: "Monthly", classification: "1099" })
       setIsAddingEmployee(false)
     }
   }
@@ -388,6 +399,42 @@ export default function AdminPayrollConsole() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">
+                      Payment Schedule
+                    </label>
+                    <Select
+                      value={newEmployee.paymentSchedule}
+                      onValueChange={(val) => setNewEmployee({ ...newEmployee, paymentSchedule: val })}
+                    >
+                      <SelectTrigger className="bg-black border-white/10 text-white h-12 font-mono">
+                        <SelectValue placeholder="Select Schedule" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-black border-white/10 text-white font-mono">
+                        <SelectItem value="Daily">DAILY STREAM</SelectItem>
+                        <SelectItem value="Weekly">WEEKLY (7 DAYS)</SelectItem>
+                        <SelectItem value="Bi-Weekly">BI-WEEKLY (14 DAYS)</SelectItem>
+                        <SelectItem value="Monthly">MONTHLY (30 DAYS)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">
+                      Classification
+                    </label>
+                    <Select
+                      value={newEmployee.classification}
+                      onValueChange={(val) => setNewEmployee({ ...newEmployee, classification: val })}
+                    >
+                      <SelectTrigger className="bg-black border-white/10 text-white h-12 font-mono">
+                        <SelectValue placeholder="Select Type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-black border-white/10 text-white font-mono">
+                        <SelectItem value="1099">CONTRACTOR (1099)</SelectItem>
+                        <SelectItem value="W-2">EMPLOYEE (W-2)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">
                       Arbitrum Wallet Address
                     </label>
                     <Input
@@ -440,7 +487,13 @@ export default function AdminPayrollConsole() {
                     Protocol Agent
                   </th>
                   <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">
+                    Type
+                  </th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">
                     Status
+                  </th>
+                  <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">
+                    Schedule
                   </th>
                   <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">
                     Annual Compensation
@@ -474,6 +527,18 @@ export default function AdminPayrollConsole() {
                     <td className="px-6 py-4">
                       <span
                         className={cn(
+                          "text-[9px] font-black uppercase tracking-widest px-2 py-1 border transition-all",
+                          emp.classification === "W-2"
+                            ? "border-blue-500/50 text-blue-400 bg-blue-500/5"
+                            : "border-purple-500/50 text-purple-400 bg-purple-500/5",
+                        )}
+                      >
+                        {emp.classification || "1099"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={cn(
                           "text-[9px] font-black uppercase tracking-widest px-3 py-1 border transition-all",
                           emp.status === "Active"
                             ? "border-green-500/50 text-green-400 bg-green-500/5"
@@ -481,6 +546,11 @@ export default function AdminPayrollConsole() {
                         )}
                       >
                         {emp.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[9px] font-black bg-white/10 text-white px-2 py-1 uppercase tracking-widest border border-white/10">
+                        {emp.paymentSchedule || "Monthly"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-xs font-black text-white font-mono tracking-tight">

@@ -8,6 +8,7 @@ import { PrivacyToggle } from "@/components/privacy/PrivacyToggle"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Link from "next/link"
 import Image from "next/image"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
@@ -16,10 +17,13 @@ interface AppShellProps {
 }
 
 export default function AppShell({ children }: AppShellProps) {
+  const { disconnect } = useWallet()
   const {
     userRole,
     userName,
     setIsLoggedIn,
+    setUserName,
+    setUserEmail,
     notifications,
     unreadCount,
     markNotificationRead,
@@ -40,9 +44,31 @@ export default function AppShell({ children }: AppShellProps) {
     { id: "settings", icon: Settings, label: "SYSTEMS", href: "/settings" },
   ]
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    // 1. Clear State
     setIsLoggedIn(false)
+    if (setUserName) setUserName("")
+    if (setUserEmail) setUserEmail("")
+
+    // 2. Clear Local Storage
+    localStorage.removeItem("jetrpay_isLoggedIn")
+    localStorage.removeItem("jetrpay_role")
+    localStorage.removeItem("jetrpay_name")
+    localStorage.removeItem("jetrpay_employees")
+    localStorage.removeItem("jetrpay_transactions")
+
+    // 3. Disconnect Wallet Adapter
+    try {
+      await disconnect()
+    } catch (e) {
+      console.error("Wallet disconnect failed", e)
+    }
+
+    // 4. Redirect & Reload
     router.push("/")
+    setTimeout(() => {
+      window.location.reload()
+    }, 100)
   }
 
   return (

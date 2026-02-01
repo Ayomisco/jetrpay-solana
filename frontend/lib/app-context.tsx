@@ -37,6 +37,8 @@ export interface Employee {
   accruedBalance: number
   walletAddress: string
   startDate: string
+  paymentSchedule: "Daily" | "Weekly" | "Bi-Weekly" | "Monthly"
+  classification: "1099" | "W-2"
 }
 
 export interface Notification {

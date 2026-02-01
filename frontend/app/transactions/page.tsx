@@ -33,6 +33,39 @@ export default function TransactionsPage() {
     return matchesSearch && matchesFilter
   })
 
+  const handleExportCSV = () => {
+    // 1. Create Headers
+    const headers = ["Transaction ID", "Type", "Asset", "Amount", "Status", "Timestamp", "Block", "To/From"]
+    
+    // 2. Map Rows
+    const rows = transactions.map(tx => [
+      tx.id,
+      tx.type.toUpperCase(),
+      tx.asset,
+      tx.amount.toFixed(6),
+      tx.status.toUpperCase(),
+      new Date(tx.timestamp).toISOString(),
+      tx.blockNumber,
+      tx.to || tx.from || "N/A"
+    ])
+
+    // 3. Combine Data
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n")
+
+    // 4. Trigger Download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+    link.setAttribute("href", url)
+    link.setAttribute("download", `jetrpay_ledger_export_${new Date().toISOString().split('T')[0]}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -40,7 +73,10 @@ export default function TransactionsPage() {
           <h1 className="text-2xl font-black italic tracking-tighter text-white uppercase">Transaction History</h1>
           <p className="text-sm text-neutral-500 font-bold mt-1">Complete ledger of all blockchain activities</p>
         </div>
-        <Button className="bg-orange-500 hover:bg-orange-600 text-black font-black uppercase text-[10px] tracking-widest rounded-none h-9">
+        <Button 
+          onClick={handleExportCSV}
+          className="bg-orange-500 hover:bg-orange-600 text-black font-black uppercase text-[10px] tracking-widest rounded-none h-9"
+        >
           <Download className="w-3.5 h-3.5 mr-2" /> Export CSV
         </Button>
       </div>
