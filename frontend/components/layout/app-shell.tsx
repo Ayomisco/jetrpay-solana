@@ -5,14 +5,12 @@ import { Wallet, Settings, Bell, Zap, LayoutDashboard, History, X, Menu, Trendin
 import { Button } from "@/components/ui/button"
 import { useApp } from "@/lib/app-context"
 import { PrivacyToggle } from "@/components/privacy/PrivacyToggle"
-import { WalletDropdown } from "@/components/wallet/WalletDropdown"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Link from "next/link"
 import Image from "next/image"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-
 
 interface AppShellProps {
   children: ReactNode
@@ -42,6 +40,8 @@ export default function AppShell({ children }: AppShellProps) {
     { id: "payroll", icon: Zap, label: userRole === "admin" ? "PAYROLL" : "STREAMS", href: "/payroll" },
     { id: "wallet", icon: Wallet, label: "VAULT", href: "/wallet" },
     { id: "transactions", icon: History, label: "LEDGER", href: "/transactions" },
+    { id: "analytics", icon: TrendingUp, label: "INTELLIGENCE", href: "/analytics" },
+    { id: "settings", icon: Settings, label: "SYSTEMS", href: "/settings" },
   ]
 
   const handleSignOut = async () => {
@@ -137,16 +137,8 @@ export default function AppShell({ children }: AppShellProps) {
             ))}
           </nav>
         </div>
-        <div className="mt-auto p-8 border-t border-white/5 space-y-4">
-          <Link href="/pitch">
-            <Button 
-              variant="outline" 
-              className="w-full border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 font-black uppercase tracking-widest text-[10px] h-10"
-            >
-              🎬 PITCH DECK
-            </Button>
-          </Link>
-          <div className="flex items-center gap-3">
+        <div className="mt-auto p-8 border-t border-white/5">
+          <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-white/5 border border-white/10 flex items-center justify-center font-black text-[10px]">
               A
             </div>
@@ -183,9 +175,69 @@ export default function AppShell({ children }: AppShellProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <WalletDropdown />
+          <div className="flex items-center gap-4">
             <PrivacyToggle />
+            
+            {/* Wallet Dropdown */}
+            {walletAddress && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="border-white/10 hover:bg-white/5 h-10 font-mono text-xs">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+                    {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 bg-black border-white/10 p-0 text-white font-mono shadow-2xl mr-4">
+                  <div className="p-4 space-y-3">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(walletAddress)
+                        const { toast } = require('@/hooks/use-toast')
+                        toast({ title: "Copied!", description: "Address copied to clipboard" })
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/5 transition rounded text-left"
+                    >
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                      </div>
+                      <span className="text-sm">Copy address</span>
+                    </button>
+                    
+                    <a
+                      href={`https://explorer.solana.com/address/5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3?cluster=devnet`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/5 transition rounded text-left"
+                    >
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </div>
+                      <span className="text-sm">Explorer</span>
+                    </a>
+                    
+                    <div className="border-t border-white/10 pt-3">
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-3 p-3 hover:bg-red-500/10 transition rounded text-left text-red-500"
+                      >
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                        </div>
+                        <span className="text-sm font-bold">Disconnect</span>
+                      </button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+            
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative group">
