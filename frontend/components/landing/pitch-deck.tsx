@@ -13,7 +13,9 @@ const slides = [
     title: "THE HOOK",
     content: (
       <div className="text-center max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-        
+        <div className="flex justify-center mb-6">
+          <Image src="/icon.png" alt="JetrPay" width={80} height={80} className="rounded-xl" />
+        </div>
         
         <div className="pt-8 space-y-4">
            <p className="text-2xl font-black text-white italic">Prove everything. Reveal nothing. Pay everyone.</p>
