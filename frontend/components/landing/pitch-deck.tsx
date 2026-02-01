@@ -12,16 +12,10 @@ const slides = [
     title: "THE HOOK",
     content: (
       <div className="text-center max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight leading-tight">
-          Imagine you're an employee at a DAO getting paid in crypto.
-        </h1>
-        <div className="space-y-6 text-xl md:text-2xl text-neutral-400 font-bold max-w-3xl mx-auto leading-relaxed">
-          <p>Every coworker can see <span className="text-orange-500">exactly what you make</span>.</p>
-          <p>Your boss can track <span className="text-red-500">your side hustles</span>.</p>
-          <p>Competitors can reconstruct your company's <span className="text-cyan-500">entire org chart</span>.</p>
-        </div>
+        
+        
         <div className="pt-8 space-y-4">
-           <p className="text-2xl font-black text-white italic">This is the reality of payroll on public blockchains.</p>
+           <p className="text-2xl font-black text-white italic">Prove everything. Reveal nothing. Pay everyone.</p>
            <div className="inline-block border-2 border-orange-500 bg-orange-500/10 px-8 py-3 rounded-lg">
               <span className="text-orange-500 font-mono font-black tracking-widest uppercase text-lg">JetrPay: First Compliance-Aware Privacy Layer</span>
            </div>
@@ -160,6 +154,29 @@ const slides = [
       </div>
     )
   },
+
+  {
+    id: "bounty",
+    title: "WHY WE WIN",
+    content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
+            {[
+                { title: "Private Payments Track", desc: "Solving the $300B payroll privacy gap.", color: "text-orange-500", border: "border-orange-500/50" },
+                { title: "Token-2022 Implementation", desc: "Native Confidential Transfer Extension. No wrappers.", color: "text-cyan-400", border: "border-cyan-500/50" },
+                { title: "Range Protocol", desc: "Compliance-gated privacy pools. Anti-laundering built in.", color: "text-purple-500", border: "border-purple-500/50" },
+                { title: "Helius RPC", desc: "Production-grade infrastructure for reliability.", color: "text-green-500", border: "border-green-500/50" }
+            ].map((item, i) => (
+                <div key={i} className={`bg-black/80 border ${item.border} p-6 flex items-start gap-4 transition-all hover:scale-[1.02] duration-300`}>
+                    <CheckCircle className={`w-6 h-6 ${item.color} mt-1`} />
+                    <div className="text-left">
+                        <h4 className={`text-lg font-black uppercase italic ${item.color}`}>{item.title}</h4>
+                        <p className="text-neutral-400 font-mono text-xs uppercase mt-2 leading-relaxed">{item.desc}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+  },
   {
     id: "demo",
     title: "LIVE PROOF",
@@ -188,29 +205,7 @@ const slides = [
             </div>
         </div>
     )
-  },
-  {
-    id: "bounty",
-    title: "WHY WE WIN",
-    content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
-            {[
-                { title: "Private Payments Track", desc: "Solving the $300B payroll privacy gap.", color: "text-orange-500", border: "border-orange-500/50" },
-                { title: "Token-2022 Implementation", desc: "Native Confidential Transfer Extension. No wrappers.", color: "text-cyan-400", border: "border-cyan-500/50" },
-                { title: "Range Protocol", desc: "Compliance-gated privacy pools. Anti-laundering built in.", color: "text-purple-500", border: "border-purple-500/50" },
-                { title: "Helius RPC", desc: "Production-grade infrastructure for reliability.", color: "text-green-500", border: "border-green-500/50" }
-            ].map((item, i) => (
-                <div key={i} className={`bg-black/80 border ${item.border} p-6 flex items-start gap-4 transition-all hover:scale-[1.02] duration-300`}>
-                    <CheckCircle className={`w-6 h-6 ${item.color} mt-1`} />
-                    <div className="text-left">
-                        <h4 className={`text-lg font-black uppercase italic ${item.color}`}>{item.title}</h4>
-                        <p className="text-neutral-400 font-mono text-xs uppercase mt-2 leading-relaxed">{item.desc}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
-  }
+  } 
 ]
 
 export default function PitchDeck() {
