@@ -138,7 +138,7 @@ export default function AppShell({ children }: AppShellProps) {
           </nav>
         </div>
         <div className="mt-auto p-8 border-t border-white/5">
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white/5 border border-white/10 flex items-center justify-center font-black text-[10px]">
               A
             </div>
@@ -149,13 +149,6 @@ export default function AppShell({ children }: AppShellProps) {
               </p>
             </div>
           </div>
-          <Button
-            onClick={handleSignOut}
-            variant="ghost"
-            className="w-full justify-start p-0 text-[8px] font-black text-neutral-600 hover:text-red-500 uppercase tracking-widest"
-          >
-            DISCONNECT
-          </Button>
         </div>
       </aside>
 
