@@ -37,6 +37,9 @@ export default function LandingPage() {
             <a href="#privacy" className="text-neutral-400 hover:text-white transition">
               Privacy
             </a>
+            <Link href="/roadmap" className="text-neutral-400 hover:text-orange-500 transition">
+              Roadmap
+            </Link>
             <Link href="/pitch" className="text-neutral-400 hover:text-orange-500 transition">
               Pitch Deck
             </Link>
