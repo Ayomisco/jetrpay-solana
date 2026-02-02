@@ -284,16 +284,6 @@ export default function AppShell({ children }: AppShellProps) {
                 </div>
               </PopoverContent>
             </Popover>
-
-            <Button
-              onClick={() => connectWallet()}
-              className={cn(
-                "h-10 px-6 font-black text-[10px] tracking-widest uppercase transition-all",
-                walletAddress ? "bg-white text-black" : "bg-transparent border border-white/20 hover:bg-white/5",
-              )}
-            >
-              {walletAddress ? walletAddress : "CONNECT_WALLET"}
-            </Button>
           </div>
         </header>
 
