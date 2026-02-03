@@ -13,7 +13,6 @@ export const metadata: Metadata = {
   description: "Get paid by the second. Privacy-first payroll streaming infrastructure on Solana.",
   icons: {
     icon: '/icon.png',
-    apple: '/apple-icon.png',
   },
 }
 
