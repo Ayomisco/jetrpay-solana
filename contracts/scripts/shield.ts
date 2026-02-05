@@ -14,6 +14,7 @@ import {
 } from "@solana/spl-token";
 
 import { loadOrGenerateKeypair } from "./utils";
+import { validateWalletForShielding } from "./range-api";
 
 // Token-2022 Program ID
 const TOKEN_2022_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
@@ -37,6 +38,20 @@ export const shieldFunds = async (
   console.log("Amount:", amount);
 
   const mint = new PublicKey(cleanMintAddress);
+
+  // ========================================
+  // RANGE PROTOCOL COMPLIANCE CHECK
+  // Screen wallet BEFORE allowing shield
+  // ========================================
+  try {
+    await validateWalletForShielding(payer.publicKey.toBase58());
+    console.log("\n✅ Wallet passed Range Protocol compliance check\n");
+  } catch (error: any) {
+    console.error("\n❌ COMPLIANCE CHECK FAILED");
+    console.error(error.message);
+    console.error("\n⛔ Shield operation blocked. Wallet cannot enter privacy pool.");
+    return;
+  }
 
   // Check SOL balance
   const balance = await connection.getBalance(payer.publicKey);

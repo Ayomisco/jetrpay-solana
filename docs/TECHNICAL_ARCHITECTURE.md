@@ -2,7 +2,7 @@
 
 ## System Overview
 
-**JetrPay** is a privacy-first payroll streaming platform built on Solana, leveraging Token-2022's Confidential Transfer extension, Range Protocol for compliance, and real-time streaming mechanics.
+**JetrPay** is a privacy-first payroll streaming platform built on Solana, leveraging Token-2022's Confidential Transfer extension, Range Protocol [@range_org](https://x.com/range_org) for compliance, and real-time streaming mechanics.
 
 ---
 
@@ -49,12 +49,12 @@
 ║    ╠══════════════════════════════════════════╪══════════════════════════════════════════════════╣   ║
 ║    ║                                          ▼                                                  ║   ║
 ║    ║   ┌──────────────────────┐        ┌───────────────────┐        ┌──────────────────────┐    ║   ║
-║    ║   │  @solana/wallet-    │        │    Helius RPC     │        │  Range Protocol API  │    ║   ║
-║    ║   │  adapter-react      │        │                   │        │                      │    ║   ║
+║    ║   │  @solana/wallet-    │        │    Helius RPC     │        │  Range Risk API    │    ║   ║
+║    ║   │  adapter-react      │        │  @heliuslabs      │        │  @range_org        │    ║   ║
 ║    ║   │                     │        │  • Enhanced       │        │  • Wallet Screening  │    ║   ║
-║    ║   │  • Phantom          │◀──────▶│    Reliability    │        │  • Risk Scoring      │    ║   ║
-║    ║   │  • Solflare         │        │  • TX Indexing    │◀──────▶│  • OFAC Compliance   │    ║   ║
-║    ║   │  • Backpack         │        │  • Devnet/Mainnet │        │  • Sanctions Check   │    ║   ║
+║    ║   │  • Phantom          │◀──────▶│    Reliability    │        │  • Risk Scoring 1-10 │    ║   ║
+║    ║   │  • Solflare         │        │  • TX Indexing    │◀──────▶│  • OFAC/EU/UK/UN     │    ║   ║
+║    ║   │  • Backpack         │        │  • Devnet/Mainnet │        │  • ML Threat Detect  │    ║   ║
 ║    ║   │                     │        │                   │        │                      │    ║   ║
 ║    ║   └──────────────────────┘        └───────────────────┘        └──────────────────────┘    ║   ║
 ║    ║                                          │                                                  ║   ║
@@ -621,8 +621,8 @@
 │   │   ┌─────────────────────┬─────────────────────┬─────────────────────────────────┐     │     │
 │   │   │       THREAT        │       IMPACT        │          MITIGATION             │     │     │
 │   │   ├─────────────────────┼─────────────────────┼─────────────────────────────────┤     │     │
-│   │   │ Sanctioned wallet   │ Contaminated        │ Range Protocol pre-screening    │     │     │
-│   │   │ enters privacy pool │ anonymity set       │ before shield operation         │     │     │
+│   │   │ Sanctioned wallet   │ Contaminated        │ @range_org Risk API           │     │     │
+│   │   │ enters privacy pool │ anonymity set       │ pre-screens before shield     │     │     │
 │   │   ├─────────────────────┼─────────────────────┼─────────────────────────────────┤     │     │
 │   │   │ Balance leakage     │ Privacy compromise  │ ElGamal 256-bit encryption      │     │     │
 │   │   │ through chain       │                     │ on all balance data             │     │     │
@@ -695,7 +695,7 @@
 │   │                        │                         │                                   │     │
 │   │   Smart Contracts      │  Anchor Framework       │  Payment streaming logic          │     │
 │   │                        │                         │                                   │     │
-│   │   Compliance           │  Range Protocol API     │  Wallet risk screening            │     │
+│   │   Compliance           │  Range Risk API (@range_org) │  Wallet screening + sanctions  │     │
 │   │                        │                         │                                   │     │
 │   │   RPC Infrastructure   │  Helius                 │  Enhanced reliability             │     │
 │   │                        │                         │                                   │     │

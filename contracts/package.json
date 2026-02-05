@@ -1,7 +1,7 @@
 {
   "name": "jetrpay-contracts",
   "version": "1.0.0",
-  "description": "Scripts for managing Token-2022 Confidential Transfers",
+  "description": "Scripts for managing Token-2022 Confidential Transfers with Range Protocol Compliance",
   "dependencies": {
     "@solana/spl-token": "^0.2.0-alpha.2",
     "@solana/web3.js": "^1.87.6",
@@ -15,7 +15,8 @@
     "shield": "npx ts-node scripts/shield.ts",
     "transfer": "npx ts-node scripts/transfer.ts",
     "unshield": "npx ts-node scripts/unshield.ts",
-    "faucet-setup": "npx ts-node scripts/create-mock-usdc.ts"
+    "faucet-setup": "npx ts-node scripts/create-mock-usdc.ts",
+    "check-compliance": "npx ts-node scripts/range-api.ts"
   },
   "devDependencies": {
     "@types/node": "^25.0.10"

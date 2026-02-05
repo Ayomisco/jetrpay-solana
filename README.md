@@ -26,11 +26,13 @@ JetrPay enables confidential salary streaming using Token-2022's native privacy 
 - Zero-Knowledge proofs for transaction validity
 - **Live Mint Address**: [`5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3`](https://explorer.solana.com/address/5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3?cluster=devnet)
 
-#### ✅ **Range Protocol** (Compliance & Risk Scoring)
-- Pre-transaction wallet screening
-- Sanctions list checking (OFAC compliance)
-- Risk-based access control (Score < 50 required)
-- Solves the "Tornado Cash problem" for privacy protocols
+#### ✅ **Range Protocol** [@range_org](https://x.com/range_org) (Compliance & Risk Scoring)
+- Real-time wallet risk scoring via Range Risk API
+- Sanctions screening (OFAC, EU, UK, UN blacklists)
+- Network proximity analysis + ML-based threat detection
+- Pre-screening at entry (not exit) - solves the "Tornado Cash problem"
+- Risk threshold: Block wallets with score >= 6 (High risk)
+- API Docs: https://docs.range.org/risk-api/risk-introduction
 
 #### ✅ **Helius** (Enterprise Infrastructure)
 - Enhanced RPC for reliable transaction submission
@@ -96,11 +98,12 @@ graph LR
 
 **Verified On-Chain**: [View Mint on Solana Explorer](https://explorer.solana.com/address/5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3?cluster=devnet)
 
-#### ✅ **2. Compliance Gate (Range Protocol)**
-- **Pre-Transaction Screening**: Check wallets before allowing deposits
-- **Risk Scoring**: 0-100 scale based on transaction history
-- **Sanctions Filtering**: OFAC list integration
-- **Clean Anonymity Set**: Keep bad actors out from the start
+#### ✅ **2. Compliance Gate (Range Protocol [@range_org](https://x.com/range_org))**
+- **Pre-Transaction Screening**: Validate wallets via Range Risk API before shielding
+- **Risk Scoring**: 1-10 scale using network proximity + ML behavioral analysis
+- **Sanctions Filtering**: OFAC, EU, UK, UN sanctions lists + issuer blacklists
+- **Clean Anonymity Set**: Block high-risk wallets (score >= 6) at entry
+- **Real API Integration**: `https://api.range.org/v1/risk/address`
 
 #### ⚡ **3. Real-Time Streaming**
 - **Per-Second Accrual**: Employees earn as they work
@@ -222,7 +225,7 @@ spl-token display 5d4Nb7xFnjkXujjL95T6ktWMcXakc9YX5NqPcsTrGit3 --url devnet
 ### **Privacy & Compliance**
 - **Encryption**: ElGamal (balances), Twisted ElGamal (amounts)
 - **Proofs**: Zero-Knowledge proofs for transaction validation
-- **Screening**: Range Protocol risk scoring
+- **Screening**: Range Protocol Risk API ([@range_org](https://x.com/range_org))
 
 ### **Infrastructure**
 - **RPC**: Helius (enhanced reliability)
@@ -300,11 +303,12 @@ Unlike mixers (sanctioned) or privacy coins (low liquidity), JetrPay:
 ✅ **Production Demo**: Live mint, working transactions  
 ✅ **Real-World Use Case**: Solves actual payroll privacy problem  
 
-### **Range Protocol Bounty**
-✅ **Compliance Integration**: Pre-transaction wallet screening  
-✅ **Risk-Based Access**: Dynamic threshold enforcement  
-✅ **Clean Anonymity Set**: Prevents sanctioned wallets  
-✅ **Regulatory Compliance**: OFAC list checking  
+### **Range Protocol Bounty** ([@range_org](https://x.com/range_org) - $1,500 Compliant Privacy)
+✅ **Real API Integration**: Live calls to `https://api.range.org/v1/risk/address`  
+✅ **Risk-Based Access**: Block wallets with riskScore >= 6 (High risk or above)  
+✅ **Network Proximity Analysis**: numHops tracking to malicious addresses  
+✅ **Sanctions Screening**: OFAC, EU, UK, UN lists + ML threat detection  
+✅ **Entry-Point Compliance**: Screen BEFORE shielding, not after  
 
 ### **Helius Bounty**
 ✅ **Enhanced RPC**: Configured for production reliability  
@@ -403,8 +407,8 @@ Built for **[Solana Privacy Hackathon 2026](https://solana.com/privacyhack)**
 
 **Special Thanks:**
 - Solana Foundation (Token-2022 program)
-- Range Protocol (Compliance infrastructure)
-- Helius (Enterprise RPC)
+- Range Protocol [@range_org](https://x.com/range_org) (Compliance infrastructure)
+- Helius [@heaborafdn](https://x.com/heliuslabs) (Enterprise RPC)
 - The Solana privacy community
 
 ---

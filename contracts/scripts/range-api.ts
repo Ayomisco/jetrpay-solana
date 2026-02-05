@@ -1,5 +1,5 @@
 /**
- * Range Protocol Compliance Integration
+ * Range Protocol API Client
  * 
  * Real integration with Range's Risk API for wallet compliance screening.
  * https://docs.range.org/risk-api/risk-introduction
@@ -7,6 +7,12 @@
  * Built for Solana Privacy Hackathon - Compliant Privacy Bounty
  * Sponsor: Range (@range_org on X)
  */
+
+import dotenv from "dotenv";
+dotenv.config();
+
+const RANGE_API_BASE_URL = "https://api.range.org/v1";
+const RANGE_API_KEY = process.env.RANGE_API_KEY || "";
 
 // TypeScript types matching Range API response schema
 export type RiskLevel =
@@ -41,13 +47,15 @@ export interface AddressRiskResponse {
   attribution?: Attribution | null;
 }
 
-export interface ComplianceCheckResult {
+export interface ComplianceResult {
   allowed: boolean;
   riskScore: number;
-  riskLevel?: RiskLevel;
-  reason?: string;
-  numHops?: number;
-  maliciousAddresses?: MaliciousEvidence[];
+  riskLevel: RiskLevel;
+  numHops: number;
+  reasoning: string;
+  maliciousAddresses: MaliciousEvidence[];
+  attribution?: Attribution | null;
+  rawResponse?: AddressRiskResponse;
 }
 
 /**
@@ -65,22 +73,18 @@ export interface ComplianceCheckResult {
  */
 const RISK_THRESHOLD = 6;
 
-const RANGE_API_BASE_URL = "https://api.range.org/v1";
-
 /**
- * Check wallet compliance using Range Protocol's Address Risk API
+ * Check wallet risk using Range Protocol's Address Risk API
  * 
  * @param walletAddress - Solana wallet address to screen
- * @returns ComplianceCheckResult with risk assessment
+ * @returns ComplianceResult with risk assessment
  */
-export const checkWalletCompliance = async (walletAddress: string): Promise<ComplianceCheckResult> => {
-  console.log(`[Range Protocol] 🔍 Checking compliance for wallet: ${walletAddress}`);
+export const checkWalletRisk = async (walletAddress: string): Promise<ComplianceResult> => {
+  console.log(`\n[Range Protocol] 🔍 Screening wallet: ${walletAddress}`);
   
-  const apiKey = process.env.NEXT_PUBLIC_RANGE_API_KEY;
-  
-  if (!apiKey) {
-    console.warn("[Range Protocol] ⚠️ No API key found. Set NEXT_PUBLIC_RANGE_API_KEY in .env.local");
-    console.warn("[Range Protocol] Using fallback mock response for development");
+  if (!RANGE_API_KEY) {
+    console.warn("[Range Protocol] ⚠️  No API key found. Set RANGE_API_KEY in .env");
+    console.warn("[Range Protocol] ⚠️  Using fallback mock response for development");
     return getMockResponse(walletAddress);
   }
 
@@ -92,7 +96,7 @@ export const checkWalletCompliance = async (walletAddress: string): Promise<Comp
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${RANGE_API_KEY}`,
         "Content-Type": "application/json",
       },
     });
@@ -101,11 +105,12 @@ export const checkWalletCompliance = async (walletAddress: string): Promise<Comp
       const errorText = await response.text();
       console.error(`[Range Protocol] ❌ API Error (${response.status}): ${errorText}`);
       
+      // Handle specific error cases
       if (response.status === 401) {
-        throw new Error("Invalid Range API key");
+        throw new Error("Invalid Range API key. Check your RANGE_API_KEY in .env");
       }
       if (response.status === 429) {
-        throw new Error("Rate limited by Range API");
+        throw new Error("Rate limited by Range API. Please wait and retry.");
       }
       
       throw new Error(`Range API error: ${response.status}`);
@@ -116,21 +121,31 @@ export const checkWalletCompliance = async (walletAddress: string): Promise<Comp
     console.log(`[Range Protocol] ✅ Risk Score: ${data.riskScore}/10`);
     console.log(`[Range Protocol] 📊 Risk Level: ${data.riskLevel}`);
     console.log(`[Range Protocol] 🔗 Hops to malicious: ${data.numHops}`);
+    console.log(`[Range Protocol] 💬 Reasoning: ${data.reasoning}`);
     
+    if (data.maliciousAddressesFound.length > 0) {
+      console.log(`[Range Protocol] ⚠️  Found ${data.maliciousAddressesFound.length} connected malicious address(es)`);
+    }
+
     const allowed = data.riskScore < RISK_THRESHOLD;
     
     return {
       allowed,
       riskScore: data.riskScore,
       riskLevel: data.riskLevel,
-      reason: data.reasoning,
       numHops: data.numHops,
+      reasoning: data.reasoning,
       maliciousAddresses: data.maliciousAddressesFound,
+      attribution: data.attribution,
+      rawResponse: data,
     };
 
   } catch (error: any) {
     console.error(`[Range Protocol] ❌ Error: ${error.message}`);
-    console.warn("[Range Protocol] Using fallback response due to API error");
+    
+    // In production, you might want to fail-closed (reject on error)
+    // For hackathon/dev, we'll use a fallback
+    console.warn("[Range Protocol] ⚠️  Using fallback response due to API error");
     return getMockResponse(walletAddress);
   }
 };
@@ -138,7 +153,8 @@ export const checkWalletCompliance = async (walletAddress: string): Promise<Comp
 /**
  * Fallback mock response for development/testing without API key
  */
-const getMockResponse = (walletAddress: string): ComplianceCheckResult => {
+const getMockResponse = (walletAddress: string): ComplianceResult => {
+  // Simulate different risk levels based on address patterns
   const lowerAddr = walletAddress.toLowerCase();
   
   // Known malicious pattern (for testing)
@@ -147,7 +163,8 @@ const getMockResponse = (walletAddress: string): ComplianceCheckResult => {
       allowed: false,
       riskScore: 10,
       riskLevel: "CRITICAL RISK (Directly malicious)",
-      reason: "[MOCK] Address matches known malicious pattern for testing",
+      numHops: 0,
+      reasoning: "[MOCK] Address matches known malicious pattern for testing",
       maliciousAddresses: [{
         address: walletAddress,
         distance: 0,
@@ -164,7 +181,9 @@ const getMockResponse = (walletAddress: string): ComplianceCheckResult => {
       allowed: false,
       riskScore: 7,
       riskLevel: "High risk",
-      reason: "[MOCK] Address exhibits medium risk patterns for testing",
+      numHops: 2,
+      reasoning: "[MOCK] Address exhibits medium risk patterns for testing",
+      maliciousAddresses: [],
     };
   }
 
@@ -173,10 +192,57 @@ const getMockResponse = (walletAddress: string): ComplianceCheckResult => {
     allowed: true,
     riskScore: 1,
     riskLevel: "Very low risk",
-    reason: "[MOCK] No suspicious paths found. Set NEXT_PUBLIC_RANGE_API_KEY for real screening.",
     numHops: 5,
+    reasoning: "[MOCK] No suspicious paths found within 5 hops. Note: Using mock response - set RANGE_API_KEY for real screening.",
+    maliciousAddresses: [],
   };
+};
+
+/**
+ * Validate that a wallet can enter the JetrPay privacy pool
+ * This is the main entry point for compliance checks
+ * 
+ * @param walletAddress - Solana wallet address
+ * @returns true if wallet is allowed, throws if rejected
+ */
+export const validateWalletForShielding = async (walletAddress: string): Promise<boolean> => {
+  console.log("\n" + "=".repeat(60));
+  console.log("  RANGE PROTOCOL COMPLIANCE CHECK");
+  console.log("  Pre-screening wallet before entering privacy pool");
+  console.log("=".repeat(60));
+  
+  const result = await checkWalletRisk(walletAddress);
+  
+  console.log("\n" + "-".repeat(60));
+  console.log(`  DECISION: ${result.allowed ? "✅ APPROVED" : "❌ REJECTED"}`);
+  console.log("-".repeat(60));
+  
+  if (!result.allowed) {
+    throw new Error(
+      `Wallet compliance check failed!\n` +
+      `Risk Score: ${result.riskScore}/10 (Threshold: ${RISK_THRESHOLD})\n` +
+      `Risk Level: ${result.riskLevel}\n` +
+      `Reason: ${result.reasoning}\n` +
+      `\nThis wallet cannot shield funds in JetrPay's privacy pool.`
+    );
+  }
+  
+  return true;
 };
 
 // Export threshold for use elsewhere
 export const COMPLIANCE_RISK_THRESHOLD = RISK_THRESHOLD;
+
+// CLI usage
+if (require.main === module) {
+  const testAddress = process.argv[2] || "7AmvTQJAQAseV53Sqbnwxm3MTKKy6chZa1rhT1FqRkfL";
+  
+  console.log("\n🔒 JetrPay Compliance Check\n");
+  console.log("Testing wallet:", testAddress);
+  
+  checkWalletRisk(testAddress)
+    .then(result => {
+      console.log("\n📋 Full Result:", JSON.stringify(result, null, 2));
+    })
+    .catch(console.error);
+}
